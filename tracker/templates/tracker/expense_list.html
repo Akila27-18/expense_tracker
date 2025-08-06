@@ -1,0 +1,38 @@
+{% extends "tracker/base.html" %}
+{% block title %}Expenses{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <h3>Your Expenses</h3>
+  <a class="btn btn-primary" href="{% url 'expense_create' %}">Add Expense</a>
+</div>
+<div class="card p-3">
+  {% if expenses %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Title</th><th>Amount</th><th>Category</th><th>Date</th><th>Notes</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for exp in expenses %}
+          <tr>
+            <td>{{ exp.title }}</td>
+            <td>${{ exp.amount }}</td>
+            <td>{{ exp.get_category_display }}</td>
+            <td>{{ exp.date }}</td>
+            <td>{{ exp.notes|default:"—" }}</td>
+            <td>
+              <a href="{% url 'expense_edit' exp.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+              <a href="{% url 'expense_delete' exp.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>You have no recorded expenses. <a href="{% url 'expense_create' %}">Add one</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}
